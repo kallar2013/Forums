@@ -17,40 +17,41 @@ class ForumsPipeline(object):
         
     def close_spider(self, spider):
         self.conn.close()
-    def handle_reply(self, item):
+        
+    def handle_reply(self, item, spider):
         str_tag = ['rid', 'rtime', 'uid', 'content', 'reply_to', 'tid']
         qmark = ','.join(len(str_tag) * ['?'])
         cols = '"' + '","'.join(str_tag) + '"'
-        sql = 'INSERT INTO replies (%s) VALUES (%s)' % (cols, qmark)
+        sql = 'INSERT INTO replies_%s (%s) VALUES (%s)' % (spider.name, cols, qmark)
         data = [item.get(x, '') for x in str_tag]
         self.cur.execute(sql, data)
         self.conn.commit()
         
-    def handle_user(self, item):
+    def handle_user(self, item, spider):
         str_tag = ['uid', 'level', 'posts', 'uname', 'register', 'recent']
         qmark = ','.join(len(str_tag) * ['?'])
         cols = '"' + '","'.join(str_tag) + '"'
-        sql = 'INSERT INTO users (%s) VALUES (%s)' % (cols, qmark)
+        sql = 'INSERT INTO users_%s (%s) VALUES (%s)' % (spider.name, cols, qmark)
         data = [item.get(x, '') for x in str_tag]
         self.cur.execute(sql, data)
         self.conn.commit()
     
-    def handle_thread(self, item):
-        str_tag = ['tid', 'title', 'see', 'msg', 'ptime', 'module', 'text', 'img', 'uid']
+    def handle_thread(self, item, spider):
+        str_tag = ['tid', 'title', 'see', 'msg', 'ptime', 'module', 'text', 'img', 'uid', 'reviews']
         qmark = ','.join(len(str_tag) * ['?'])
         cols = '"' + '","'.join(str_tag) + '"'
-        sql = 'INSERT INTO threads (%s) VALUES (%s)' % (cols, qmark)
+        sql = 'INSERT INTO threads_%s (%s) VALUES (%s)' % (spider.name, cols, qmark)
         data = [item.get(x, '') for x in str_tag]
         self.cur.execute(sql, data)
         self.conn.commit()
         
     def process_item(self, item, spider):
         if isinstance(item, Reply):
-            self.handle_reply(item)
+            self.handle_reply(item, spider)
         elif isinstance(item, User):
-            self.handle_user(item)
+            self.handle_user(item, spider)
         elif isinstance(item, Thread):
-            self.handle_thread(item)
+            self.handle_thread(item, spider)
         else:
             DropItem
         return item

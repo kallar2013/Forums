@@ -15,7 +15,7 @@ SPIDER_MODULES = ['forums.spiders']
 NEWSPIDER_MODULE = 'forums.spiders'
 RETRY_TIMES = 5
 RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 404, 408, 429, 302]
-DUPEFILTER_CLASS = 'forums.middleware.IDDupeFilter'
+#DUPEFILTER_CLASS = 'forums.middleware.IDDupeFilter'
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
     'random_useragent.RandomUserAgentMiddleware': 400,
@@ -24,7 +24,7 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     'forums.pipelines.ForumsPipeline': 300,
 }
-DEPTH_PRIORITY = 1
+#DEPTH_PRIORITY = 1
 USER_AGENT_LIST = "useragents.txt"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent

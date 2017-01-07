@@ -17,6 +17,7 @@ class Thread(scrapy.Item):
     text = scrapy.Field()
     img = scrapy.Field()
     uid = scrapy.Field()
+    reviews = scrapy.Field()
     
 class User(scrapy.Item):
     uid = scrapy.Field()
